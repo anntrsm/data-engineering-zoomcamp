@@ -1,0 +1,56 @@
+docker run -it \
+    -e POSTGRES_USER="root" \
+    -e POSTGRES_PASSWORD="root" \
+    -e POSTGRES_DB="ny_taxi" \
+    -v $(pwd)/ny_taxi_data:/var/lib/postgresql/data \
+    -p 5432:5432 \
+    --network=pg-network \
+    --name pg_database \
+    postgres:13
+
+docker network create pg-network
+
+python insert_data_into_postgres.py \
+    --user=root\
+    --password=root\
+    --host=localhost\
+    --port=5432\
+    --dbname=ny_taxi\
+    --tablename=green_zone_taxi_data\
+    --url=https://github.com/DataTalksClub/nyc-tlc-data/releases/download/green/green_tripdata_2019-09.csv.gz
+
+python insert_data_into_postgres.py \
+    --user=root\
+    --password=root\
+    --host=localhost\
+    --port=5432\
+    --dbname=ny_taxi\
+    --tablename=taxi_zones\
+    --url=https://s3.amazonaws.com/nyc-tlc/misc/taxi+_zone_lookup.csv
+
+docker build -t load_taxi_data:v001 .
+
+URL="https://github.com/DataTalksClub/nyc-tlc-data/releases/download/green/green_tripdata_2019-09.csv.gz"
+docker run -it \
+    --network=pg-network \
+    load_taxi_data:v001 \
+    --user=root \
+    --password=root \
+    --host=pg_database \
+    --port=5432 \
+    --dbname=ny_taxi \
+    --tablename=green_zone_taxi_data \
+    --url=${URL}
+
+URL="https://s3.amazonaws.com/nyc-tlc/misc/taxi+_zone_lookup.csv"
+docker run -it \
+    --network=pg-network \
+    load_taxi_data:v001 \
+    --user=root \
+    --password=root \
+    --host=pg_database \
+    --port=5432 \
+    --dbname=ny_taxi \
+    --tablename=taxi_zones \
+    --url=${URL}
+
