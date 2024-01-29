@@ -1,8 +1,10 @@
 ## Week 2 Homework
 
+> In case you don't get one option exactly, select the closest one 
+
 For the homework, we'll be working with the _green_ taxi dataset located here:
 
-`https://github.com/DataTalksClub/nyc-tlc-data/releases/download/green`
+`https://github.com/DataTalksClub/nyc-tlc-data/releases/tag/green/download`
 
 ### Assignment
 
@@ -82,9 +84,9 @@ Once exported, how many partitions (folders) are present in Google Cloud?
 
 ## Submitting the solutions
 
-* Form for submitting: TBA 
+* Form for submitting: https://courses.datatalks.club/de-zoomcamp-2024/homework/hw2
 
-Deadline: TBA
+Deadline: February, 5th (Monday), 23:00 CET
 
 ## Solution
 
